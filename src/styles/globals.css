@@ -1,0 +1,29 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap");
+
+html,
+body {
+  font-family: "Inter", sans-serif;
+}
+
+.gradient {
+  @apply bg-gradient-to-r from-[#9572FC] via-[#43E7AD] to-[#E1D55D];
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+input[type="time"]::-webkit-calendar-picker-indicator {
+  @apply invert;
+}

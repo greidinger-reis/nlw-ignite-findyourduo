@@ -22,7 +22,7 @@ export default defineNextConfig({
     defaultLocale: "en",
   },
   images: {
-    domains: ["static-cdn.jtvnw.net"],
+    domains: ["static-cdn.jtvnw.net", "cdn.discordapp.com"],
   },
   webpack(config) {
     config.module.rules.push({

@@ -97,8 +97,9 @@ const CreateAdModal = () => {
                 <input
                   className="input bg-neutral rounded text-zinc-500 placeholder:text-zinc-500"
                   placeholder="Usuário + Tag discord"
-                  type="text"
-                  {...(register("discord"), { required: true })}
+                  type="number"
+                  {...(register("discordUserId"),
+                  { valueAsNumber: true, required: true })}
                 />
               </div>
             </div>

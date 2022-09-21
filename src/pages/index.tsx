@@ -3,7 +3,7 @@ import { gamesRouter } from "../server/trpc/router/games";
 import { createProxySSGHelpers } from "@trpc/react/ssg";
 import { GetStaticProps, InferGetStaticPropsType } from "next";
 import Head from "next/head";
-import Logo from "../assets/Logo.svg";
+
 import CreateAdCard from "../components/home/CreateAdCard";
 import GamesBanner from "../components/home/GamesBanner";
 import { AllGamesQueryOutput } from "../types/games";
@@ -17,8 +17,7 @@ const Home = ({ games }: InferGetStaticPropsType<typeof getStaticProps>) => {
         <meta name="description" content="Find your duo" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="h-full w-full flex flex-col gap-16 items-center">
-        <Logo className="mt-16" />
+      <main className="h-screen w-full flex flex-col gap-16 items-center justify-center">
         <h1 className="text-6xl font-extrabold text-white">
           Seu{" "}
           <span className="tracking-tight text-transparent bg-clip-text gradient">
@@ -38,7 +37,7 @@ export const getStaticProps: GetStaticProps<{
 }> = async () => {
   const ssg = createProxySSGHelpers({
     router: gamesRouter,
-    ctx: await createContextInner({}),
+    ctx: await createContextInner({ session: null }),
   });
 
   const games = await ssg.getAllGames.fetch();

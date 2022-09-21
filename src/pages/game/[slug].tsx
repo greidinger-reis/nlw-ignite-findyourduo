@@ -26,7 +26,7 @@ const GamePage = ({ slug }: InferGetStaticPropsType<typeof getStaticProps>) => {
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const ctx = await createContextInner({});
+  const ctx = await createContextInner({ session: null });
   const games = await ctx.prisma.game.findMany({
     select: {
       slug: true,
@@ -45,7 +45,7 @@ export const getStaticProps: GetStaticProps<{
   const slug = ctx.params?.slug as string;
   const ssg = createProxySSGHelpers({
     router: adsRouter,
-    ctx: await createContextInner({}),
+    ctx: await createContextInner({ session: null }),
     transformer: superjson,
   });
 

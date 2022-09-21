@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { AdMutationInput } from "../../types/ads";
 import { trpc } from "../../utils/trpc";
 import SwapWeekDays from "./SwapWeekDays";
-import { weekDaysAbbr } from "../../types/weekdays";
+import { weekDaysAbbr } from "../../constants/weekdays";
 
 const CreateAdModal = () => {
   const { data: game } = trpc.games.getAllGames.useQuery();

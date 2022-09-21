@@ -1,4 +1,4 @@
-import { weekDays } from "@prisma/client";
+import { WeekDays } from "@prisma/client";
 import { z } from "zod";
 import { t } from "../trpc";
 import { TRPCError } from "@trpc/server";
@@ -31,7 +31,7 @@ export const adsRouter = t.router({
         name: z.string().min(1),
         yearsPlaying: z.number(),
         discord: z.string(),
-        weekDays: z.array(z.nativeEnum(weekDays)),
+        weekDays: z.array(z.nativeEnum(WeekDays)),
         hoursStart: z.string(),
         hoursEnd: z.string(),
         useVoiceChat: z.boolean(),

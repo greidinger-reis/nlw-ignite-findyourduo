@@ -1,5 +1,5 @@
 import type { WeekDays } from "@prisma/client";
-import { weekDaysAbbr } from "../../types/weekdays";
+import { weekDaysAbbr } from "../../constants/weekdays";
 import {
   CalendarCheck,
   Clock,

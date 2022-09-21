@@ -4,10 +4,12 @@ import type { AppType } from "next/dist/shared/lib/utils";
 import { trpc } from "../utils/trpc";
 import Image from "next/future/image";
 import Fundo from "../assets/Fundo.jpg";
+import NavBar from "../components/NavBar";
 
 const MyApp: AppType = ({ Component, pageProps }) => {
   return (
-    <div className="flex">
+    <div className="flex flex-col">
+      <NavBar />
       <Image
         priority
         quality={100}

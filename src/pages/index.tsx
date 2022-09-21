@@ -4,8 +4,8 @@ import { createProxySSGHelpers } from "@trpc/react/ssg";
 import { GetStaticProps, InferGetStaticPropsType } from "next";
 import Head from "next/head";
 import Logo from "../assets/Logo.svg";
-import CreateAdCard from "../components/CreateAdCard";
-import GamesBanner from "../components/GamesBanner";
+import CreateAdCard from "../components/home/CreateAdCard";
+import GamesBanner from "../components/home/GamesBanner";
 import { AllGamesQueryOutput } from "../types/games";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars

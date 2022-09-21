@@ -10,22 +10,16 @@ import { adsRouter } from "../../server/trpc/router/ads";
 import { DehydratedState } from "@tanstack/react-query";
 import { trpc } from "../../utils/trpc";
 import superjson from "superjson";
+import AdCard from "../../components/game/AdCard";
 
 const GamePage = ({ slug }: InferGetStaticPropsType<typeof getStaticProps>) => {
   const { data: ads, isLoading } = trpc.ads.getAdsByGameSlug.useQuery({ slug });
   return (
-    <div>
-      <h1>Game: {slug}</h1>
+    <div className="container flex items-center justify-center mx-auto h-screen">
       <ul>
         {isLoading
           ? "Loading..."
-          : ads?.map((ad) => (
-              <li key={ad.id}>
-                <span>{ad.name}</span>
-                <span>{ad.weekDays}</span>
-                <span>{ad.discord}</span>
-              </li>
-            ))}
+          : ads?.map((ad) => <AdCard key={ad.id} ad={ad} />)}
       </ul>
     </div>
   );

@@ -1,4 +1,7 @@
 import { AdsRouter } from "../server/trpc/router/ads";
-import { inferProcedureInput } from "@trpc/server";
+import { inferProcedureInput, inferProcedureOutput } from "@trpc/server";
 
+type AdQueryOutput = inferProcedureOutput<AdsRouter["getAdsByGameSlug"]>;
+
+export type Ad = AdQueryOutput[number];
 export type AdMutationInput = inferProcedureInput<AdsRouter["createAd"]>;

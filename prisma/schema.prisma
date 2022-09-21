@@ -24,7 +24,7 @@ model Ad {
   name         String
   yearsPlaying Int
   discord      String
-  weekDays     weekDays[]
+  weekDays     WeekDays[]
   hoursStart   String
   hoursEnd     String
   useVoiceChat Boolean
@@ -34,7 +34,7 @@ model Ad {
   Game Game? @relation(fields: [gameId], references: [id])
 }
 
-enum weekDays {
+enum WeekDays {
   DOMINGO
   SEGUNDA
   TERCA

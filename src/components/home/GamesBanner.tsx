@@ -1,7 +1,7 @@
 import Image from "next/future/image";
 import Link from "next/link";
 import { useRef } from "react";
-import { AllGamesQueryOutput } from "../types/games";
+import { AllGamesQueryOutput } from "../../types/games";
 import { CaretLeft, CaretRight } from "phosphor-react";
 
 const GameCard = ({

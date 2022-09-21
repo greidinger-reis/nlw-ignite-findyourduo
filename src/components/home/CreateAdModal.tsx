@@ -1,20 +1,10 @@
 import { GameController, MagnifyingGlassPlus } from "phosphor-react";
 import { useRef } from "react";
 import { useForm } from "react-hook-form";
-import { AdMutationInput } from "../types/ads";
-import { trpc } from "../utils/trpc";
+import { AdMutationInput } from "../../types/ads";
+import { trpc } from "../../utils/trpc";
 import SwapWeekDays from "./SwapWeekDays";
-import { weekDays } from "@prisma/client";
-
-const weekDaysAbbr = [
-  { letter: "D", name: weekDays.DOMINGO },
-  { letter: "S", name: weekDays.SEGUNDA },
-  { letter: "T", name: weekDays.TERCA },
-  { letter: "Q", name: weekDays.QUARTA },
-  { letter: "Q", name: weekDays.QUINTA },
-  { letter: "S", name: weekDays.SEXTA },
-  { letter: "S", name: weekDays.SABADO },
-];
+import { weekDaysAbbr } from "../../types/weekdays";
 
 const CreateAdModal = () => {
   const { data: game } = trpc.games.getAllGames.useQuery();

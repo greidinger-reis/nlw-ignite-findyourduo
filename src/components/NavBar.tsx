@@ -5,7 +5,7 @@ import { SignIn } from "phosphor-react";
 import Logo from "../assets/Logo.svg";
 
 const NavBar = () => {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
 
   return (
     <header className="navbar bg-accent backdrop-blur-sm bg-opacity-60 fixed">
@@ -22,16 +22,18 @@ const NavBar = () => {
                 <Image
                   src={session.user?.image}
                   alt="Avatar do usúario"
-                  width={64}
-                  height={64}
-                  className="rounded-full border-2 border-primary cursor-pointer"
+                  width={48}
+                  height={48}
+                  className="rounded-full cursor-pointer"
                   tabIndex={0}
                 />
                 <ul
                   tabIndex={0}
                   className="dropdown-content menu p-4 gap-1 shadow bg-base-100 rounded-box w-fit"
                 >
-                  <li className="font-bold text-white">{session.user.name}</li>
+                  <li className="font-bold text-white">
+                    {session.user.name}#{session.user.disciminator}
+                  </li>
                   <Link href={`/my-ads`}>
                     <a className="hover:text-primary hover:underline">
                       Meus anúncios
@@ -47,6 +49,8 @@ const NavBar = () => {
               </div>
             )}
           </>
+        ) : status === "loading" ? (
+          <div className="rounded-full h-12 w-12 animate-pulse bg-zinc-500" />
         ) : (
           <button
             className="btn btn-primary ml-auto gap-1 text-white"

@@ -19,17 +19,16 @@ model Game {
 }
 
 model Ad {
-  id            String     @id @default(cuid())
-  gameId        String?
-  name          String
-  yearsPlaying  Int
-  discordUserId Int
-  weekDays      WeekDays[]
-  hoursStart    String
-  hoursEnd      String
-  useVoiceChat  Boolean
-  createdAt     DateTime   @default(now())
-  updatedAt     DateTime   @updatedAt
+  id           String     @id @default(cuid())
+  gameId       String?
+  name         String
+  yearsPlaying Int
+  weekDays     WeekDays[]
+  hoursStart   String
+  hoursEnd     String
+  useVoiceChat Boolean
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
 
   Game   Game?   @relation(fields: [gameId], references: [id])
   User   User?   @relation(fields: [userId], references: [id])
@@ -79,6 +78,7 @@ model User {
   email         String?   @unique
   emailVerified DateTime?
   image         String?
+  discriminator String?
   ads           Ad[]
   accounts      Account[]
   sessions      Session[]

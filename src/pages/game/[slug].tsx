@@ -11,15 +11,26 @@ import { DehydratedState } from "@tanstack/react-query";
 import { trpc } from "../../utils/trpc";
 import superjson from "superjson";
 import AdCard from "../../components/game/AdCard";
+import { CgSpinner } from "react-icons/cg";
+import CreateAdModal from "../../components/home/CreateAdModal";
 
 const GamePage = ({ slug }: InferGetStaticPropsType<typeof getStaticProps>) => {
   const { data: ads, isLoading } = trpc.ads.getAdsByGameSlug.useQuery({ slug });
   return (
     <div className="container flex items-center justify-center mx-auto h-screen">
-      <ul>
-        {isLoading
-          ? "Loading..."
-          : ads?.map((ad) => <AdCard key={ad.id} ad={ad} />)}
+      <ul className="flex gap-4 flex-wrap justify-center">
+        {isLoading ? (
+          <CgSpinner size={32} className="animtate-spin text-blue-500" />
+        ) : ads && ads?.length > 0 ? (
+          ads?.map((ad) => <AdCard key={ad.id} ad={ad} />)
+        ) : (
+          <div className="flex flex-col gap-4 px-8">
+            <h1 className="font-bold text-2xl text-center">
+              Não há anúncios para este jogo no momento
+            </h1>
+            <CreateAdModal />
+          </div>
+        )}
       </ul>
     </div>
   );

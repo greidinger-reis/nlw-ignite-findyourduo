@@ -14,18 +14,16 @@ const MyApp: AppType<{ session: Session | null }> = ({
 }) => {
   return (
     <SessionProvider session={pageProps.session}>
-      <div className="flex flex-col">
-        <NavBar />
-        <Image
-          priority
-          quality={100}
-          src={Fundo}
-          fill={true}
-          alt="fundo"
-          className="absolute -z-10"
-        />
-        <Component {...pageProps} />
-      </div>
+      <NavBar />
+      <Image
+        priority
+        quality={100}
+        src={Fundo}
+        fill={true}
+        alt="fundo"
+        className="absolute -z-10"
+      />
+      <Component {...pageProps} />
     </SessionProvider>
   );
 };

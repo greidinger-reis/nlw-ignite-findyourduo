@@ -34,7 +34,7 @@ const CreateAdModal = () => {
         className="modal-toggle"
       />
       <div className="modal modal-bottom sm:modal-middle bg-black bg-opacity-60">
-        <div className="modal-box bg-base-100 flex flex-col">
+        <div className="modal-box bg-base-100 flex flex-col rounded-none sm:rounded-box">
           <strong className="font-black tracking-tight text-[32px] leading-relaxed text-white mb-8">
             Publique um anúncio
           </strong>
@@ -93,7 +93,7 @@ const CreateAdModal = () => {
               <label htmlFor="dias-semana" className="text-white font-semibold">
                 Quando costuma jogar?
               </label>
-              <div className="flex gap-1" id="dias-semana">
+              <div className="flex flex-wrap gap-1" id="dias-semana">
                 {weekDaysAbbr.map((day) => (
                   <label key={day.name} className="swap">
                     <input

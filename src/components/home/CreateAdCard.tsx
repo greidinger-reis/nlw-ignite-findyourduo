@@ -2,8 +2,8 @@ import CreateAdModal from "./CreateAdModal";
 
 const CreateAdCard = () => {
   return (
-    <div className="rounded-box gradient h-28 w-3/4 max-w-7xl">
-      <div className="mt-[5px] flex rounded-box px-8 py-6 bg-accent items-center">
+    <div className="sm:rounded-box gradient h-28 sm:w-3/4 sm:max-w-7xl w-full">
+      <div className="mt-[5px] flex flex-col gap-4 sm:gap-0 sm:flex-row sm:rounded-box px-8 py-6 bg-accent items-center">
         <div className="flex flex-col gap-1">
           <strong className="text-2xl tracking-tight font-black text-white">
             Não encontrou seu duo?
@@ -12,7 +12,7 @@ const CreateAdCard = () => {
             Publique um anúncio para encontrar novos players!
           </span>
         </div>
-        <div className="ml-auto">
+        <div className="sm:ml-auto w-full sm:w-fit">
           <CreateAdModal />
         </div>
       </div>

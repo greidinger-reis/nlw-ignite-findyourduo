@@ -8,7 +8,7 @@ const NavBar = () => {
   const { data: session, status } = useSession();
 
   return (
-    <header className="navbar bg-accent backdrop-blur-sm bg-opacity-60 fixed">
+    <header className="navbar bg-accent backdrop-blur-sm bg-opacity-60">
       <nav className="flex w-full px-4 py-2">
         <Link href="/">
           <a>

@@ -17,8 +17,8 @@ const Home = ({ games }: InferGetStaticPropsType<typeof getStaticProps>) => {
         <meta name="description" content="Find your duo" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="h-screen w-full flex flex-col gap-16 items-center justify-center">
-        <h1 className="text-6xl font-extrabold text-white">
+      <main className="w-full flex flex-col gap-16 items-center h-screen sm:h-[calc(100vh-100px)] justify-center">
+        <h1 className="text-6xl font-extrabold text-white text-center">
           Seu{" "}
           <span className="tracking-tight text-transparent bg-clip-text gradient">
             duo

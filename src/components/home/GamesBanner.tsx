@@ -41,8 +41,9 @@ const GameCard = ({
 const GamesBanner = ({ games }: { games: AllGamesQueryOutput | undefined }) => {
   const carouselRef = useRef<HTMLUListElement>(null);
   return (
-    <div className="flex gap-4 max-w-[1380px] w-10/12 ">
+    <div className="flex sm:gap-4 max-w-[1380px] sm:w-10/12 w-full px-2 sm:px-0">
       <button
+        className="hidden sm:block"
         onClick={() => {
           if (!carouselRef.current) {
             return;
@@ -67,6 +68,7 @@ const GamesBanner = ({ games }: { games: AllGamesQueryOutput | undefined }) => {
         ))}
       </ul>
       <button
+        className="hidden sm:block"
         onClick={() => {
           if (!carouselRef.current) {
             return;

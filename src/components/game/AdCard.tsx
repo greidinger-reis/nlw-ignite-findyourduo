@@ -74,7 +74,7 @@ const LetsPlayModal = ({ ad }: { ad: Ad }) => {
           </p>
           <p>
             <strong>Jogo nestes dias: </strong>
-            <p className="flex gap-1">
+            <p className="flex gap-1 break-all">
               {ad.weekDays.map((day) => (
                 <span key={day}>{weekDaysAccented[day]}</span>
               ))}

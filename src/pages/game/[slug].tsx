@@ -7,28 +7,35 @@ import {
 import { GetStaticProps } from "next";
 import { createProxySSGHelpers } from "@trpc/react/ssg";
 import { adsRouter } from "../../server/trpc/router/ads";
-import { DehydratedState } from "@tanstack/react-query";
-import { trpc } from "../../utils/trpc";
 import superjson from "superjson";
 import AdCard from "../../components/game/AdCard";
 import CreateAdModal from "../../components/home/CreateAdModal";
-import Spinner from "../../components/Spinner";
+import { AdQueryOutput } from "../../types/ads";
+import { ArrowsClockwise } from "phosphor-react";
+import { useRouter } from "next/router";
 
-const GamePage = ({ slug }: InferGetStaticPropsType<typeof getStaticProps>) => {
-  const { data: ads, isLoading } = trpc.ads.getAdsByGameSlug.useQuery({ slug });
+const GamePage = ({ ads }: InferGetStaticPropsType<typeof getStaticProps>) => {
+  const router = useRouter();
   return (
     <div className="container flex items-center justify-center mx-auto h-screen">
       <ul className="flex gap-4 flex-wrap justify-center">
-        {isLoading ? (
-          <Spinner />
-        ) : ads && ads?.length > 0 ? (
-          ads?.map((ad) => <AdCard key={ad.id} ad={ad} />)
+        {ads && ads.length > 0 ? (
+          ads.map((ad) => <AdCard key={ad.id} ad={ad} />)
         ) : (
           <div className="flex flex-col gap-4 px-8">
             <h1 className="font-bold text-2xl text-center">
               Não há anúncios para este jogo no momento
             </h1>
-            <CreateAdModal />
+            <div className="flex gap-2 justify-center">
+              <CreateAdModal />
+              <button
+                onClick={() => router.reload()}
+                className="btn btn-accent gap-1"
+              >
+                Atualizar
+                <ArrowsClockwise size={24} />
+              </button>
+            </div>
           </div>
         )}
       </ul>
@@ -50,7 +57,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 };
 
 export const getStaticProps: GetStaticProps<{
-  dehydratedState: DehydratedState;
+  ads: AdQueryOutput;
   slug: string;
 }> = async (ctx: GetStaticPropsContext) => {
   const slug = ctx.params?.slug as string;
@@ -60,11 +67,11 @@ export const getStaticProps: GetStaticProps<{
     transformer: superjson,
   });
 
-  await ssg.getAdsByGameSlug.fetch({ slug });
+  const ads = await ssg.getAdsByGameSlug.fetch({ slug });
 
   return {
     props: {
-      dehydratedState: ssg.dehydrate(),
+      ads,
       slug,
     },
   };

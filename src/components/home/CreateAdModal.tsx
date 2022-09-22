@@ -1,5 +1,5 @@
 import { GameController, MagnifyingGlassPlus } from "phosphor-react";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { AdMutationInput } from "../../types/ads";
 import { trpc } from "../../utils/trpc";
@@ -7,21 +7,27 @@ import SwapWeekDays from "./SwapWeekDays";
 import { weekDaysAbbr } from "../../constants/weekdays";
 import { revalidatePages } from "../../helpers/revalidateCache";
 import { useRouter } from "next/router";
+import classNames from "classnames";
+import Spinner from "../Spinner";
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const CreateAdModal = () => {
   const router = useRouter();
+  const [creatingAd, setCreatingAd] = useState(false);
   const { data: game } = trpc.games.getAllGames.useQuery();
   const { mutate: createAd } = trpc.ads.createAd.useMutation({
     onError: (err) => console.error(err),
     onSuccess: async (data) => {
-      await revalidatePages([data.gameSlug]);
-      router.push(`/game/${data.gameSlug}`);
+      await revalidatePages(data.gameSlug).then(() => {
+        router.push(`/game/${data.gameSlug}`);
+      });
     },
   }); //TODO: revalidate the cache and redirect to the game page
   const { register, handleSubmit } = useForm<AdMutationInput>();
   const formRef = useRef<HTMLFormElement>(null);
 
   const onSubmit = (data: AdMutationInput) => {
+    setCreatingAd(true);
     createAd(data);
   };
 
@@ -148,10 +154,23 @@ const CreateAdModal = () => {
               <label
                 onClick={handleSubmit(onSubmit)}
                 htmlFor="modal-criar-anuncio"
-                className="btn btn-primary gap-2 text-white tracking-wider"
+                className={classNames(
+                  "btn btn-primary text-white tracking-wider",
+                  {
+                    "btn-disabled": creatingAd,
+                  }
+                )}
               >
-                <GameController size={24} className="mb-[1px]" />
-                Encontrar duo
+                {creatingAd ? (
+                  <span className="flex gap-2 items-center">
+                    Publicando <Spinner size={24} />
+                  </span>
+                ) : (
+                  <span className="flex gap-2 items-center">
+                    Publicar anúncio{" "}
+                    <GameController size={24} className="mb-[1px]" />
+                  </span>
+                )}
               </label>
             </div>
           </form>

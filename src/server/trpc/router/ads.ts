@@ -19,9 +19,29 @@ export const adsRouter = t.router({
             slug,
           },
         },
-        include: {
-          User: true,
-          Game: true,
+        select: {
+          id: true,
+          name: true,
+          gameSlug: true,
+          weekDays: true,
+          hoursStart: true,
+          hoursEnd: true,
+          useVoiceChat: true,
+          yearsPlaying: true,
+          User: {
+            select: {
+              name: true,
+              image: true,
+              discriminator: true,
+            },
+          },
+          Game: {
+            select: {
+              title: true,
+              slug: true,
+              bannerUrl: true,
+            },
+          },
         },
         orderBy: {
           createdAt: "desc",

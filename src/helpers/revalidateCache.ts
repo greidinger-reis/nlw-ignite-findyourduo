@@ -14,15 +14,10 @@ const revalidate = (secret: string, paths: string[]) => {
     });
 };
 
-export const revalidatePages = async (slug?: string[]) => {
-  const basePath = ["/"];
+export const revalidatePages = (slug: string) => {
+  const basePath = "/";
+  const pathToRevalidate = `/game/${slug}`;
+  const paths = [basePath, pathToRevalidate];
 
-  if (slug) {
-    const pathsToRevalidate = slug.map((slug) => `/game/${slug}`);
-    const path = basePath.concat(pathsToRevalidate);
-    await revalidate(env.NEXT_PUBLIC_REVALIDATE_KEY, path);
-    return;
-  }
-
-  await revalidate(env.NEXT_PUBLIC_REVALIDATE_KEY, basePath);
+  return revalidate(env.NEXT_PUBLIC_REVALIDATE_KEY, paths);
 };

@@ -14,7 +14,6 @@ export const authOptions: NextAuthOptions = {
       clientId: env.DISCORD_CLIENT_ID,
       clientSecret: env.DISCORD_CLIENT_SECRET,
       profile(profile) {
-        console.log("profile:", profile);
         return {
           id: profile.id,
           name: profile.username,
@@ -34,7 +33,6 @@ export const authOptions: NextAuthOptions = {
   // Include user.id on session
   callbacks: {
     session({ session, user }) {
-      console.log("user:", user);
       if (session.user) {
         session.user.id = user.id;
         session.user.disciminator = user.discriminator as string;

@@ -15,6 +15,7 @@ const CreateAdModal = () => {
   const formRef = useRef<HTMLFormElement>(null);
 
   const onSubmit = (data: AdMutationInput) => {
+    console.log(data);
     createAd(data);
   };
 
@@ -44,7 +45,7 @@ const CreateAdModal = () => {
             >
               Qual o game?
               <select
-                {...(register("gameId"), { required: true })}
+                {...register("gameId", { required: true })}
                 className="select bg-neutral text-zinc-500 font-normal text-base rounded w-full"
               >
                 <option disabled selected={true}>
@@ -66,7 +67,7 @@ const CreateAdModal = () => {
                 className="font-normal input bg-neutral rounded text-zinc-500 placeholder:text-zinc-500"
                 placeholder="Como te chamam dentro do game?"
                 type="text"
-                {...(register("name"), { required: true })}
+                {...register("name", { required: true })}
               />
             </label>
             <div className="flex gap-2 justify-between">
@@ -85,21 +86,6 @@ const CreateAdModal = () => {
                     valueAsNumber: true,
                     required: true,
                   })}
-                />
-              </div>
-              <div>
-                <label
-                  htmlFor="discord"
-                  className="flex flex-col text-white font-semibold"
-                >
-                  Qual seu discord?
-                </label>
-                <input
-                  className="input bg-neutral rounded text-zinc-500 placeholder:text-zinc-500"
-                  placeholder="Usuário + Tag discord"
-                  type="number"
-                  {...(register("discordUserId"),
-                  { valueAsNumber: true, required: true })}
                 />
               </div>
             </div>
@@ -128,12 +114,12 @@ const CreateAdModal = () => {
                 <input
                   className="before:content-['De'] before:mr-1 input bg-neutral rounded text-zinc-500 placeholder:text-zinc-500"
                   type="time"
-                  {...(register("hoursStart"), { required: true })}
+                  {...register("hoursStart", { required: true })}
                 />
                 <input
                   className="before:content-['Até'] before:mr-1 input bg-neutral rounded text-zinc-500 placeholder:text-zinc-500"
                   type="time"
-                  {...(register("hoursEnd"), { required: true })}
+                  {...register("hoursEnd", { required: true })}
                 />
               </div>
             </div>

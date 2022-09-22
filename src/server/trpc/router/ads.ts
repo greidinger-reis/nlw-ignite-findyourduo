@@ -1,3 +1,4 @@
+import { authedProcedure } from "./../trpc";
 import { WeekDays } from "@prisma/client";
 import { z } from "zod";
 import { t } from "../trpc";
@@ -18,19 +19,21 @@ export const adsRouter = t.router({
             slug,
           },
         },
+        include: {
+          User: true,
+        },
         orderBy: {
           createdAt: "desc",
         },
       });
     }),
 
-  createAd: t.procedure
+  createAd: authedProcedure
     .input(
       z.object({
         gameId: z.string(),
         name: z.string().min(1),
         yearsPlaying: z.number(),
-        discordUserId: z.number(),
         weekDays: z.array(z.nativeEnum(WeekDays)),
         hoursStart: z.string(),
         hoursEnd: z.string(),
@@ -38,11 +41,11 @@ export const adsRouter = t.router({
       })
     )
     .mutation(async ({ ctx, input }) => {
+      const { id: userId } = ctx.session.user;
       const {
         gameId,
         name,
         yearsPlaying,
-        discordUserId,
         weekDays,
         hoursStart,
         hoursEnd,
@@ -54,11 +57,11 @@ export const adsRouter = t.router({
             gameId,
             name,
             yearsPlaying,
-            discordUserId,
             weekDays,
             hoursStart,
             hoursEnd,
             useVoiceChat,
+            userId,
           },
         })
         .catch((err) => {

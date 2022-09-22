@@ -32,7 +32,7 @@ export const adsRouter = t.router({
   createAd: authedProcedure
     .input(
       z.object({
-        gameId: z.string(),
+        gameSlug: z.string(),
         name: z.string().min(1),
         yearsPlaying: z.number(),
         weekDays: z.array(z.nativeEnum(WeekDays)),
@@ -44,7 +44,7 @@ export const adsRouter = t.router({
     .mutation(async ({ ctx, input }) => {
       const { id: userId } = ctx.session.user;
       const {
-        gameId,
+        gameSlug,
         name,
         yearsPlaying,
         weekDays,
@@ -55,7 +55,7 @@ export const adsRouter = t.router({
       return await ctx.prisma.ad
         .create({
           data: {
-            gameId,
+            gameSlug,
             name,
             yearsPlaying,
             weekDays,

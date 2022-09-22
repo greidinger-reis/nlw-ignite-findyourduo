@@ -5,17 +5,23 @@ import { AdMutationInput } from "../../types/ads";
 import { trpc } from "../../utils/trpc";
 import SwapWeekDays from "./SwapWeekDays";
 import { weekDaysAbbr } from "../../constants/weekdays";
+import { revalidatePages } from "../../helpers/revalidateCache";
+import { useRouter } from "next/router";
 
 const CreateAdModal = () => {
+  const router = useRouter();
   const { data: game } = trpc.games.getAllGames.useQuery();
   const { mutate: createAd } = trpc.ads.createAd.useMutation({
     onError: (err) => console.error(err),
+    onSuccess: async (data) => {
+      await revalidatePages([data.gameSlug]);
+      router.push(`/game/${data.gameSlug}`);
+    },
   }); //TODO: revalidate the cache and redirect to the game page
   const { register, handleSubmit } = useForm<AdMutationInput>();
   const formRef = useRef<HTMLFormElement>(null);
 
   const onSubmit = (data: AdMutationInput) => {
-    console.log(data);
     createAd(data);
   };
 
@@ -45,14 +51,14 @@ const CreateAdModal = () => {
             >
               Qual o game?
               <select
-                {...register("gameId", { required: true })}
+                {...register("gameSlug", { required: true })}
                 className="select bg-neutral text-zinc-500 font-normal text-base rounded w-full"
               >
                 <option disabled selected={true}>
                   Selecione o game que deseja jogar
                 </option>
                 {game?.map((game) => (
-                  <option key={game.id} value={game.id}>
+                  <option key={game.slug} value={game.slug}>
                     {game.title}
                   </option>
                 ))}

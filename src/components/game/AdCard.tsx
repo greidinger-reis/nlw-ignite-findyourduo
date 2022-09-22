@@ -1,4 +1,4 @@
-import type { WeekDays } from "@prisma/client";
+import { WeekDays } from "@prisma/client";
 import { weekDaysAbbr } from "../../constants/weekdays";
 import {
   CalendarCheck,
@@ -6,11 +6,23 @@ import {
   GameController,
   Microphone,
   MicrophoneSlash,
+  X,
 } from "phosphor-react";
 import { Ad } from "../../types/ads";
 import classNames from "classnames";
 import Image from "next/future/image";
 import Tooltip from "../Tooltip";
+import { useEffect, useState } from "react";
+
+const weekDaysAccented = {
+  [WeekDays.DOMINGO]: "Domingo",
+  [WeekDays.SEGUNDA]: "Segunda",
+  [WeekDays.TERCA]: "Terça",
+  [WeekDays.QUARTA]: "Quarta",
+  [WeekDays.QUINTA]: "Quinta",
+  [WeekDays.SEXTA]: "Sexta",
+  [WeekDays.SABADO]: "Sábado",
+};
 
 const PlayerWeekDays = ({ weekDays }: { weekDays: WeekDays[] }) => {
   return (
@@ -37,58 +49,119 @@ const VoiceIcon = ({ useVoiceChat }: { useVoiceChat: boolean }) => {
   );
 };
 
+const LetsPlayModal = ({ ad }: { ad: Ad }) => {
+  const [discordUserCopied, setDiscordUserCopied] = useState(false);
+  const modalId = `ad-${ad.id}`;
+  const discordUser = `${ad.User?.name}#${ad.User?.discriminator}`;
+
+  useEffect(() => {
+    if (discordUserCopied) {
+      setTimeout(() => setDiscordUserCopied(false), 2000);
+    }
+  }, [discordUserCopied]);
+
+  return (
+    <>
+      <label htmlFor={modalId} className="btn btn-primary mt-4">
+        Vamos jogar!
+      </label>
+      <input className="modal-toggle" type="checkbox" id={modalId} />
+      <div className="modal modal-bottom sm:modal-middle">
+        <div className="modal-box flex flex-col gap-2">
+          <p className="flex gap-2 items-center">
+            <strong className="card-title">{ad.name}</strong>
+            <span className="text-gray-400">{discordUser}</span>
+          </p>
+          <p>
+            <strong>Jogo nestes dias: </strong>
+            <p className="flex gap-1">
+              {ad.weekDays.map((day) => (
+                <span key={day}>{weekDaysAccented[day]}</span>
+              ))}
+            </p>
+          </p>
+          <p>
+            <strong>Horários disponíveis: </strong>
+            <span>
+              de {ad.hoursStart} até {ad.hoursEnd}
+            </span>
+          </p>
+          <p>
+            Joga {ad.Game?.title} há {ad.yearsPlaying} anos.
+          </p>
+          <label
+            htmlFor={modalId}
+            className="btn btn-sm btn-circle absolute right-2 top-2"
+          >
+            <X size={16} />
+          </label>
+          <button
+            onClick={() => {
+              navigator.clipboard.writeText(discordUser);
+              setDiscordUserCopied(true);
+            }}
+            className={classNames("btn btn-primary mt-2", {
+              "btn-disabled bg-green-500 text-accent opacity-50":
+                discordUserCopied,
+            })}
+          >
+            {discordUserCopied ? "Copiado!" : "Copiar usuário discord"}
+          </button>
+        </div>
+      </div>
+    </>
+  );
+};
+
 const AdCard = ({ ad }: { ad: Ad }) => {
   return (
-    <li className="card hover:scale-105 transition-all duration-300">
-      <div className="bg-accent card-body gap-2 relative">
-        {ad.User?.image ? (
-          <div className="flex gap-2 items-center mb-5">
-            <Image
-              className="rounded-md"
-              alt="Imagem usuário autor do anúncio"
-              src={ad.User?.image}
-              width={64}
-              height={64}
-            />
-            <h5 className="card-title">{ad.name}</h5>
+    <>
+      <li className="card transition-all duration-300">
+        <div className="bg-accent card-body gap-2 relative">
+          {ad.User?.image ? (
+            <div className="flex gap-2 items-center mb-5">
+              <Image
+                className="rounded-md"
+                alt="Imagem usuário autor do anúncio"
+                src={ad.User?.image}
+                width={64}
+                height={64}
+              />
+              <h5 className="card-title">{ad.name}</h5>
+            </div>
+          ) : (
+            <h5 className="card-title mb-4">{ad.name}</h5>
+          )}
+          <div className="flex gap-1 items-center">
+            <CalendarCheck size={24} />
+            <PlayerWeekDays weekDays={ad.weekDays} />
           </div>
-        ) : (
-          <h5 className="card-title mb-4">{ad.name}</h5>
-        )}
-        <div className="flex gap-1 items-center">
-          <CalendarCheck size={24} />
-          <PlayerWeekDays weekDays={ad.weekDays} />
+          <div className="flex gap-1 items-center">
+            <Clock size={24} />
+            <span className="bg-neutral px-2 py-1 rounded font-semibold">
+              {ad.hoursStart}
+            </span>
+            <span className="bg-neutral px-2 py-1 rounded font-semibold">
+              {ad.hoursEnd}
+            </span>
+          </div>
+          <div className="flex gap-1 items-center">
+            <GameController size={24} />
+            <span className="gap-1 font-semibold">{ad.yearsPlaying} anos</span>
+          </div>
+          <div className="absolute top-1 right-1">
+            <Tooltip
+              message={`Este jogador ${
+                ad.useVoiceChat ? "utiliza" : "não utiliza"
+              } chat de voz.`}
+            >
+              <VoiceIcon useVoiceChat={ad.useVoiceChat} />
+            </Tooltip>
+          </div>
+          <LetsPlayModal ad={ad} />
         </div>
-        <div className="flex gap-1 items-center">
-          <Clock size={24} />
-          <span className="bg-neutral px-2 py-1 rounded font-semibold">
-            {ad.hoursStart}
-          </span>
-          <span className="bg-neutral px-2 py-1 rounded font-semibold">
-            {ad.hoursEnd}
-          </span>
-        </div>
-        <div className="flex gap-1 items-center">
-          <GameController size={24} />
-          <span className="gap-1 font-semibold">{ad.yearsPlaying} anos</span>
-        </div>
-        <div className="absolute top-1 right-1">
-          <Tooltip
-            message={`Este jogador ${
-              ad.useVoiceChat ? "utiliza" : "não utiliza"
-            } chat de voz.`}
-          >
-            <VoiceIcon useVoiceChat={ad.useVoiceChat} />
-          </Tooltip>
-        </div>
-        <button
-          onClick={() => console.log(ad.User)}
-          className="btn btn-primary mt-4"
-        >
-          Vamos jogar!
-        </button>
-      </div>
-    </li>
+      </li>
+    </>
   );
 };
 

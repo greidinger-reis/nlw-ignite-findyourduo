@@ -50,7 +50,7 @@ const NavBar = () => {
             )}
           </>
         ) : status === "loading" ? (
-          <div className="rounded-full h-12 w-12 animate-pulse bg-zinc-500" />
+          <div className="ml-auto rounded-full h-12 w-12 animate-pulse bg-zinc-500" />
         ) : (
           <button
             className="btn btn-primary ml-auto gap-1 text-white"

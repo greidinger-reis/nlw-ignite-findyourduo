@@ -21,6 +21,7 @@ export const adsRouter = t.router({
         },
         include: {
           User: true,
+          Game: true,
         },
         orderBy: {
           createdAt: "desc",

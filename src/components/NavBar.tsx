@@ -1,7 +1,7 @@
 import { signIn, signOut, useSession } from "next-auth/react";
 import Image from "next/future/image";
 import Link from "next/link";
-import { SignIn } from "phosphor-react";
+import { CaretDown, SignIn } from "phosphor-react";
 import Logo from "../assets/Logo.svg";
 
 const NavBar = () => {
@@ -19,21 +19,28 @@ const NavBar = () => {
           <>
             {session.user?.image && (
               <div className="ml-auto dropdown dropdown-end">
-                <Image
-                  src={session.user?.image}
-                  alt="Avatar do usúario"
-                  width={48}
-                  height={48}
-                  className="rounded-full cursor-pointer"
-                  tabIndex={0}
-                />
+                <div className="flex items-center">
+                  <strong className="mr-2">
+                    {session.user?.name}#{session.user.disciminator}
+                  </strong>
+                  <Image
+                    src={session.user?.image}
+                    alt="Avatar do usúario"
+                    width={48}
+                    height={48}
+                    className="rounded-full cursor-pointer"
+                    tabIndex={0}
+                  />
+                  <CaretDown
+                    tabIndex={0}
+                    size={20}
+                    className="ml-1 cursor-pointer"
+                  />
+                </div>
                 <ul
                   tabIndex={0}
                   className="dropdown-content menu p-4 gap-1 shadow bg-base-100 rounded-box w-fit"
                 >
-                  <li className="font-bold text-white">
-                    {session.user.name}#{session.user.disciminator}
-                  </li>
                   <Link href={`/my-ads`}>
                     <a className="hover:text-primary hover:underline">
                       Meus anúncios

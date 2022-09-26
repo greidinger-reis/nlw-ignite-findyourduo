@@ -33,8 +33,8 @@ $ npm run dev
 
 ### Casos de uso
 
-- [ ] Login social com discord
+- [x] Login social com discord
 - [x] Listagem de games com contagem de anúncios
 - [x] Criação de novo anúncio
 - [x] Listagem de anúncios por game
-- [ ] Buscar discord por ID do anúncio 
+- [x] Página com lista de anúncios criados pelo usúario, com possibilidade de editar e excluir anúncios.

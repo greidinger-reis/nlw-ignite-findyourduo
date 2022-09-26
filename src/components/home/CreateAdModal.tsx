@@ -188,9 +188,8 @@ const CreateAdModal = () => {
 
   if (isLoading)
     return (
-      <button className="text-white font-medium text-base tracking-wide flex gap-2 transition-all btn btn-disabled animate-pulse">
-        <MagnifyingGlassPlus size={20} className="mt-[1px]" /> Publicar um
-        anúncio
+      <button className="text-white font-medium text-base tracking-wide flex gap-2 transition-all btn btn-primary bg-opacity-60 animate-pulse">
+        <MagnifyingGlassPlus size={20} className="mt-[1px]" /> Publicar anúncio
       </button>
     );
 

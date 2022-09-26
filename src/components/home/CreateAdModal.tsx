@@ -186,7 +186,12 @@ const CreateAdModal = () => {
   const { data: session, status } = useSession();
   const isLoading = status === "loading";
 
-  if (isLoading) return;
+  if (isLoading)
+    return (
+      <button className="btn btn-disabled">
+        <MagnifyingGlassPlus /> Publicar um anúncio
+      </button>
+    );
 
   if (!session) return <UnathedCreateAdButton />;
 

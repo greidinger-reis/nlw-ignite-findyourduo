@@ -89,6 +89,84 @@ export const adsRouter = t.router({
           throw new TRPCError({ code: "BAD_REQUEST", message: err.message });
         });
     }),
+
+  getUserAds: authedProcedure
+    .input(
+      z.object({
+        userId: z.string(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const { userId } = input;
+      return await ctx.prisma.ad.findMany({
+        where: {
+          userId,
+        },
+        include: {
+          Game: true,
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+      });
+    }),
+
+  deleteAd: authedProcedure
+    .input(
+      z.object({
+        adId: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { adId } = input;
+      return await ctx.prisma.ad.delete({
+        where: {
+          id: adId,
+        },
+      });
+    }),
+
+  updateAd: authedProcedure
+    .input(
+      z.object({
+        adId: z.string(),
+        gameSlug: z.string(),
+        name: z.string().min(1),
+        yearsPlaying: z.number(),
+        weekDays: z.array(z.nativeEnum(WeekDays)),
+        hoursStart: z.string(),
+        hoursEnd: z.string(),
+        useVoiceChat: z.boolean(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const {
+        adId,
+        name,
+        gameSlug,
+        yearsPlaying,
+        weekDays,
+        hoursStart,
+        hoursEnd,
+        useVoiceChat,
+      } = input;
+      const { id: userId } = ctx.session.user;
+      return await ctx.prisma.ad.update({
+        where: {
+          id: adId,
+        },
+        data: {
+          name,
+          gameSlug,
+          yearsPlaying,
+          weekDays,
+          hoursStart,
+          hoursEnd,
+          useVoiceChat,
+          userId,
+        },
+      });
+    }),
 });
 
 export type AdsRouter = typeof adsRouter;

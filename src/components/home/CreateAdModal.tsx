@@ -1,7 +1,7 @@
-import { GameController, MagnifyingGlassPlus } from "phosphor-react";
+import { GameController, MagnifyingGlassPlus, Pencil } from "phosphor-react";
 import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
-import { AdMutationInput } from "../../types/ads";
+import type { CreateAdInput, UpdateAdInput } from "../../types/ads";
 import { trpc } from "../../utils/trpc";
 import SwapWeekDays from "./SwapWeekDays";
 import { weekDaysAbbr } from "../../constants/weekdays";
@@ -11,7 +11,11 @@ import Spinner from "../Spinner";
 import { useSession } from "next-auth/react";
 import LoginModal from "./LoginModal";
 
-const AuthedCreateAdButton = () => {
+export const AuthedCreateAdButton = ({
+  adToUpdate,
+}: {
+  adToUpdate?: UpdateAdInput;
+}) => {
   const router = useRouter();
   const [creatingAd, setCreatingAd] = useState(false);
   const { data: game } = trpc.games.getAllGames.useQuery();
@@ -20,27 +24,67 @@ const AuthedCreateAdButton = () => {
     onSuccess: async (data) => {
       router.push(`/game/${data.gameSlug}`);
     },
-  }); //TODO: revalidate the cache and redirect to the game page
-  const { register, handleSubmit } = useForm<AdMutationInput>();
+  });
+  const { mutate: updateAd } = trpc.ads.updateAd.useMutation({
+    onError: (err) => console.error(err),
+    onSuccess: async (data) => {
+      router.push(`/game/${data.gameSlug}`);
+    },
+  });
+  const { register: registerCreateAd, handleSubmit: handleSubmitCreateAd } =
+    useForm<CreateAdInput>();
+  const {
+    register: registerUpdateAd,
+    handleSubmit: handleSubmitUpdateAd,
+    setValue,
+  } = useForm<UpdateAdInput>();
+
   const formRef = useRef<HTMLFormElement>(null);
 
-  const onSubmit = (data: AdMutationInput) => {
+  const handleCreateAd = (data: CreateAdInput) => {
     setCreatingAd(true);
     createAd(data);
   };
 
+  const handleUpdateAd = (data: UpdateAdInput) => {
+    setCreatingAd(true);
+    updateAd(data);
+  };
+
+  adToUpdate && setValue("adId", adToUpdate.adId);
+
   return (
     <>
       <label
-        htmlFor="modal-criar-anuncio"
-        className="text-white font-medium text-base tracking-wide flex gap-2 transition-all btn btn-primary"
+        htmlFor={
+          adToUpdate
+            ? `modal-editar-anuncio-${adToUpdate.adId}`
+            : "modal-criar-anuncio"
+        }
+        className={classNames(
+          "text-white font-medium text-base tracking-wide flex gap-2 transition-all btn",
+          {
+            "btn-sm btn-info": adToUpdate,
+            "btn-primary": !adToUpdate,
+          }
+        )}
       >
-        <MagnifyingGlassPlus size={20} className="mt-[1px]" />
-        Publicar anúncio
+        {adToUpdate ? (
+          <Pencil size={20} />
+        ) : (
+          <>
+            <MagnifyingGlassPlus size={20} className="mt-[1px]" />{" "}
+            <span>Publicar anúncio</span>
+          </>
+        )}
       </label>
       <input
         type="checkbox"
-        id="modal-criar-anuncio"
+        id={
+          adToUpdate
+            ? `modal-editar-anuncio-${adToUpdate.adId}`
+            : "modal-criar-anuncio"
+        }
         className="modal-toggle"
       />
       <div className="modal modal-bottom sm:modal-middle bg-black bg-opacity-60">
@@ -55,14 +99,20 @@ const AuthedCreateAdButton = () => {
             >
               Qual o game?
               <select
-                {...register("gameSlug", { required: true })}
                 className="select bg-neutral text-zinc-500 font-normal text-base rounded w-full"
+                {...(adToUpdate
+                  ? { ...registerUpdateAd("gameSlug", { required: true }) }
+                  : { ...registerCreateAd("gameSlug", { required: true }) })}
               >
-                <option disabled selected={true}>
+                <option disabled selected={!adToUpdate}>
                   Selecione o game que deseja jogar
                 </option>
                 {game?.map((game) => (
-                  <option key={game.slug} value={game.slug}>
+                  <option
+                    selected={adToUpdate?.gameSlug === game.slug}
+                    key={game.slug}
+                    value={game.slug}
+                  >
                     {game.title}
                   </option>
                 ))}
@@ -77,7 +127,10 @@ const AuthedCreateAdButton = () => {
                 className="font-normal input bg-neutral rounded text-zinc-500 placeholder:text-zinc-500"
                 placeholder="Como te chamam dentro do game?"
                 type="text"
-                {...register("name", { required: true })}
+                defaultValue={adToUpdate?.name}
+                {...(adToUpdate
+                  ? { ...registerUpdateAd("name", { required: true }) }
+                  : { ...registerCreateAd("name", { required: true }) })}
               />
             </label>
             <div className="flex gap-2 justify-between">
@@ -92,10 +145,20 @@ const AuthedCreateAdButton = () => {
                   className="input bg-neutral rounded text-zinc-500 placeholder:text-zinc-500"
                   placeholder="Tudo bem ser ZERO"
                   type="number"
-                  {...register("yearsPlaying", {
-                    valueAsNumber: true,
-                    required: true,
-                  })}
+                  defaultValue={adToUpdate?.yearsPlaying}
+                  {...(adToUpdate
+                    ? {
+                        ...registerUpdateAd("yearsPlaying", {
+                          required: true,
+                          valueAsNumber: true,
+                        }),
+                      }
+                    : {
+                        ...registerCreateAd("yearsPlaying", {
+                          required: true,
+                          valueAsNumber: true,
+                        }),
+                      })}
                 />
               </div>
             </div>
@@ -109,7 +172,10 @@ const AuthedCreateAdButton = () => {
                     <input
                       type="checkbox"
                       value={day.name}
-                      {...register("weekDays")}
+                      defaultChecked={adToUpdate?.weekDays.includes(day.name)}
+                      {...(adToUpdate
+                        ? { ...registerUpdateAd("weekDays") }
+                        : { ...registerCreateAd("weekDays") })}
                     />
                     <SwapWeekDays text={day.letter} />
                   </label>
@@ -124,12 +190,20 @@ const AuthedCreateAdButton = () => {
                 <input
                   className="before:content-['De'] before:mr-1 input bg-neutral rounded text-zinc-500 placeholder:text-zinc-500"
                   type="time"
-                  {...register("hoursStart", { required: true })}
+                  defaultValue={adToUpdate?.hoursStart}
+                  {...(adToUpdate
+                    ? { ...registerUpdateAd("hoursStart", { required: true }) }
+                    : {
+                        ...registerCreateAd("hoursStart", { required: true }),
+                      })}
                 />
                 <input
                   className="before:content-['Até'] before:mr-1 input bg-neutral rounded text-zinc-500 placeholder:text-zinc-500"
                   type="time"
-                  {...register("hoursEnd", { required: true })}
+                  defaultValue={adToUpdate?.hoursEnd}
+                  {...(adToUpdate
+                    ? { ...registerUpdateAd("hoursEnd", { required: true }) }
+                    : { ...registerCreateAd("hoursEnd", { required: true }) })}
                 />
               </div>
             </div>
@@ -138,20 +212,37 @@ const AuthedCreateAdButton = () => {
               <input
                 className="checkbox rounded bg-neutral checkbox-primary border-0"
                 type="checkbox"
-                {...register("useVoiceChat")}
+                defaultChecked={adToUpdate?.useVoiceChat}
+                {...(adToUpdate
+                  ? { ...registerUpdateAd("useVoiceChat", { required: true }) }
+                  : {
+                      ...registerCreateAd("useVoiceChat", { required: true }),
+                    })}
               />
             </label>
             <div className="modal-action flex justify-end gap-2">
               <label
                 onClick={() => formRef.current?.reset()}
-                htmlFor="modal-criar-anuncio"
+                htmlFor={
+                  adToUpdate
+                    ? `modal-editar-anuncio-${adToUpdate.adId}`
+                    : "modal-criar-anuncio"
+                }
                 className="btn btn-secondary text-white tracking-wider"
               >
                 Cancelar
               </label>
               <label
-                onClick={handleSubmit(onSubmit)}
-                htmlFor="modal-criar-anuncio"
+                onClick={
+                  adToUpdate
+                    ? handleSubmitUpdateAd(handleUpdateAd)
+                    : handleSubmitCreateAd(handleCreateAd)
+                }
+                htmlFor={
+                  adToUpdate
+                    ? `modal-editar-anuncio-${adToUpdate.adId}`
+                    : "modal-criar-anuncio"
+                }
                 className={classNames(
                   "btn btn-primary text-white tracking-wider",
                   {

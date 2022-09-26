@@ -1,4 +1,3 @@
-import { WeekDays } from "@prisma/client";
 import { weekDaysAbbr } from "../../constants/weekdays";
 import {
   CalendarCheck,
@@ -13,18 +12,10 @@ import classNames from "classnames";
 import Image from "next/future/image";
 import Tooltip from "../Tooltip";
 import { useEffect, useState } from "react";
+import { weekDaysAccented } from "../../utils/weekdays";
+import type { WeekDays } from "@prisma/client";
 
-const weekDaysAccented = {
-  [WeekDays.DOMINGO]: "Domingo",
-  [WeekDays.SEGUNDA]: "Segunda",
-  [WeekDays.TERCA]: "Terça",
-  [WeekDays.QUARTA]: "Quarta",
-  [WeekDays.QUINTA]: "Quinta",
-  [WeekDays.SEXTA]: "Sexta",
-  [WeekDays.SABADO]: "Sábado",
-};
-
-const PlayerWeekDays = ({ weekDays }: { weekDays: WeekDays[] }) => {
+export const PlayerWeekDays = ({ weekDays }: { weekDays: WeekDays[] }) => {
   return (
     <div className="flex gap-1">
       {weekDaysAbbr.map((day) => (

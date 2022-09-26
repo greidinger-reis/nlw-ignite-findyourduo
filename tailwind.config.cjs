@@ -25,13 +25,13 @@ module.exports = {
 
           "base-100": "#2A2634",
 
-          info: "#4E6EE4",
+          info: "#3b82f6",
 
-          success: "#177356",
+          success: "#22c55e",
 
-          warning: "#CD8A0E",
+          warning: "#eab308",
 
-          error: "#F15574",
+          error: "#ef4444",
 
           "--rounded-box": "0.5rem",
 

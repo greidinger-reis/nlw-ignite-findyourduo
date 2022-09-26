@@ -1,7 +1,7 @@
 import { signIn, signOut, useSession } from "next-auth/react";
 import Image from "next/future/image";
 import Link from "next/link";
-import { CaretDown, SignIn } from "phosphor-react";
+import { CaretDown, DiscordLogo, SignIn } from "phosphor-react";
 import Logo from "../assets/Logo.svg";
 
 const NavBar = () => {
@@ -63,7 +63,7 @@ const NavBar = () => {
             className="btn btn-primary ml-auto gap-1 text-white"
             onClick={() => signIn("discord")}
           >
-            Fazer login
+            <DiscordLogo size={20} className="mt-[1px] mr-1" /> Fazer login
             <SignIn size={20} />
           </button>
         )}

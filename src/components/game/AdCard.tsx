@@ -101,8 +101,7 @@ const LetsPlayModal = ({ ad }: { ad: Ad }) => {
               setDiscordUserCopied(true);
             }}
             className={classNames("btn btn-primary mt-2", {
-              "btn-disabled bg-green-500 text-accent opacity-50":
-                discordUserCopied,
+              "btn-disabled bg-green-500 text-accent": discordUserCopied,
             })}
           >
             {discordUserCopied ? "Copiado!" : "Copiar usuário discord"}

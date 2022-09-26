@@ -5,22 +5,20 @@ import { AdMutationInput } from "../../types/ads";
 import { trpc } from "../../utils/trpc";
 import SwapWeekDays from "./SwapWeekDays";
 import { weekDaysAbbr } from "../../constants/weekdays";
-import { revalidatePages } from "../../helpers/revalidateCache";
 import { useRouter } from "next/router";
 import classNames from "classnames";
 import Spinner from "../Spinner";
+import { useSession } from "next-auth/react";
+import LoginModal from "./LoginModal";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const CreateAdModal = () => {
+const AuthedCreateAdButton = () => {
   const router = useRouter();
   const [creatingAd, setCreatingAd] = useState(false);
   const { data: game } = trpc.games.getAllGames.useQuery();
   const { mutate: createAd } = trpc.ads.createAd.useMutation({
     onError: (err) => console.error(err),
     onSuccess: async (data) => {
-      await revalidatePages(data.gameSlug).then(() => {
-        router.push(`/game/${data.gameSlug}`);
-      });
+      router.push(`/game/${data.gameSlug}`);
     },
   }); //TODO: revalidate the cache and redirect to the game page
   const { register, handleSubmit } = useForm<AdMutationInput>();
@@ -47,7 +45,7 @@ const CreateAdModal = () => {
       />
       <div className="modal modal-bottom sm:modal-middle bg-black bg-opacity-60">
         <div className="modal-box bg-base-100 flex flex-col rounded-none sm:rounded-box">
-          <strong className="font-black tracking-tight text-[32px] leading-relaxed text-white mb-8">
+          <strong className="text-center font-black tracking-tight text-[32px] leading-relaxed text-white mb-8">
             Publique um anúncio
           </strong>
           <form ref={formRef} className="flex flex-col gap-4">
@@ -178,6 +176,21 @@ const CreateAdModal = () => {
       </div>
     </>
   );
+};
+
+const UnathedCreateAdButton = () => {
+  return <LoginModal />;
+};
+
+const CreateAdModal = () => {
+  const { data: session, status } = useSession();
+  const isLoading = status === "loading";
+
+  if (isLoading) return;
+
+  if (!session) return <UnathedCreateAdButton />;
+
+  return <AuthedCreateAdButton />;
 };
 
 export default CreateAdModal;

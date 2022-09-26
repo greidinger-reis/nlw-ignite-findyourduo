@@ -12,7 +12,6 @@ import CreateAdModal from "../../components/home/CreateAdModal";
 import { trpc } from "../../utils/trpc";
 import Spinner from "../../components/Spinner";
 import { appRouter } from "../../server/trpc/router";
-import type { DehydratedState } from "@tanstack/react-query";
 import Link from "next/link";
 import { GameBySlugQueryOutput } from "../../types/games";
 
@@ -70,7 +69,6 @@ export const getStaticPaths: GetStaticPaths = async () => {
 };
 
 export const getStaticProps: GetStaticProps<{
-  trpcState: DehydratedState;
   game: GameBySlugQueryOutput;
   slug: string;
 }> = async (ctx: GetStaticPropsContext) => {
@@ -81,12 +79,10 @@ export const getStaticProps: GetStaticProps<{
     transformer: superjson,
   });
 
-  await ssg.ads.getAdsByGameSlug.fetch({ slug });
   const game = await ssg.games.getGameBySlug.fetch({ slug });
 
   return {
     props: {
-      trpcState: ssg.dehydrate(),
       game,
       slug,
     },

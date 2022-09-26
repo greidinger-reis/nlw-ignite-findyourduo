@@ -41,7 +41,7 @@ const NavBar = () => {
                   tabIndex={0}
                   className="dropdown-content menu p-4 gap-1 shadow bg-base-100 rounded-box w-fit"
                 >
-                  <Link href={`/my-ads/${session.user.id}`}>
+                  <Link href="/my-ads">
                     <a className="hover:text-primary hover:underline">
                       Meus anúncios
                     </a>

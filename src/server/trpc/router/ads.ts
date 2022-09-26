@@ -93,7 +93,7 @@ export const adsRouter = t.router({
   getUserAds: authedProcedure
     .input(
       z.object({
-        userId: z.string(),
+        userId: z.string().optional(),
       })
     )
     .query(async ({ ctx, input }) => {

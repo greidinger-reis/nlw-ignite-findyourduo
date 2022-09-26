@@ -1,7 +1,7 @@
 import classNames from "classnames";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
-import { useRouter } from "next/router";
-import { Pencil, Trash } from "phosphor-react";
+import { Trash } from "phosphor-react";
 import CreateAdModal, {
   AuthedCreateAdButton,
 } from "../../components/home/CreateAdModal";
@@ -10,13 +10,15 @@ import { UpdateAdInput } from "../../types/ads";
 import { trpc } from "../../utils/trpc";
 
 const UserAdListPage = () => {
-  const { query } = useRouter();
-  const userId = query.userId as string;
+  const { data: session } = useSession();
+  const userId = session?.user?.id;
+
   const {
     data: userAds,
     isLoading,
     refetch: refreshAdlist,
   } = trpc.ads.getUserAds.useQuery({ userId });
+
   const { mutateAsync: deleteAd, status } = trpc.ads.deleteAd.useMutation();
 
   const handleDeleteAd = async (adId: string) => {
@@ -34,7 +36,7 @@ const UserAdListPage = () => {
             </Link>
           </li>
           <li>
-            <Link href={`/my-ads/${userId}`}>
+            <Link href="/my-ads">
               <a>Meus anúncios</a>
             </Link>
           </li>

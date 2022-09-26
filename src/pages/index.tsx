@@ -8,7 +8,6 @@ import CreateAdCard from "../components/home/CreateAdCard";
 import GamesBanner from "../components/home/GamesBanner";
 import { AllGamesQueryOutput } from "../types/games";
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const Home = ({ games }: InferGetStaticPropsType<typeof getStaticProps>) => {
   return (
     <>
@@ -46,6 +45,7 @@ export const getStaticProps: GetStaticProps<{
     props: {
       games,
     },
+    revalidate: 60,
   };
 };
 

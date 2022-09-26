@@ -8,12 +8,12 @@ const GameCard = ({
   slug,
   bannerUrl,
   gameTitle,
-  adsCount,
+  adCount,
 }: {
   slug: string;
   bannerUrl: string;
   gameTitle: string;
-  adsCount: number;
+  adCount: number;
 }) => {
   return (
     <li className="card w-48 h-64 overflow-hidden relative carousel-item">
@@ -29,7 +29,7 @@ const GameCard = ({
               {gameTitle}
             </strong>
             <span className="text-zinc-300 block text-sm">
-              {adsCount} {adsCount === 1 ? "anúncio" : "anúncios"}
+              {adCount} {adCount === 1 ? "anúncio" : "anúncios"}
             </span>
           </div>
         </a>
@@ -63,7 +63,7 @@ const GamesBanner = ({ games }: { games: AllGamesQueryOutput | undefined }) => {
             gameTitle={game.title}
             slug={game.slug}
             bannerUrl={game.bannerUrl}
-            adsCount={game._count.ads}
+            adCount={game._count.ads}
           />
         ))}
       </ul>

@@ -214,9 +214,9 @@ export const AuthedCreateAdButton = ({
                 type="checkbox"
                 defaultChecked={adToUpdate?.useVoiceChat}
                 {...(adToUpdate
-                  ? { ...registerUpdateAd("useVoiceChat", { required: true }) }
+                  ? { ...registerUpdateAd("useVoiceChat") }
                   : {
-                      ...registerCreateAd("useVoiceChat", { required: true }),
+                      ...registerCreateAd("useVoiceChat"),
                     })}
               />
             </label>

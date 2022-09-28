@@ -61,7 +61,7 @@ const UserAdListPage = () => {
               };
               return (
                 <li
-                  className="flex items-center rounded bg-accent py-3 px-6"
+                  className="flex items-center rounded bg-accent py-3 px-6 hover:scale-[102%] transition-all duration-400 hover:drop-shadow-xl"
                   key={ad.id}
                 >
                   <div className="flex flex-col">

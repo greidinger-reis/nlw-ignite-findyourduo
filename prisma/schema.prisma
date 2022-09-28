@@ -23,7 +23,7 @@ model Ad {
   userId       String
   gameSlug     String
   name         String
-  yearsPlaying Int
+  yearsPlaying Float
   weekDays     WeekDays[]
   hoursStart   String
   hoursEnd     String
